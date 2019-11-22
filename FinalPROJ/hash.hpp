@@ -6,7 +6,6 @@ class Hash{
     int hashMod(int key);
     int hashFloor(int key);
     int testGarbage();
-    int pcTowerChange();
   private:
 
 
