@@ -5,6 +5,7 @@ class Hash{
   public:
     int hashMod(int key);
     int hashFloor(int key);
+    int testGarbage();
 
   private:
 
