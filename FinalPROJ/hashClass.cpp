@@ -18,6 +18,7 @@ class Hash{
     int hashMod(int key);
     int hashFloor(int key);
     void printTable(int number);
+    void testInsert(int key);
     bool table1Linear(int index, int key);
     bool table2Linear(int index, int key);
   private:
@@ -54,14 +55,14 @@ void Hash::printTable(int number){
 return ;
 }
 bool Hash::table1Linear(int index, int key){
-    for(int i = index; i < TABLE_SIZE; i++){
+    for(int i = index+1; i < TABLE_SIZE; i++){
       if(hashTable1[i] == -1) //If empty index
-      hashTable1table[i] = key; //Place new data
+      hashTable1[i] = key; //Place new data
       return true;
     }
     return false; //If table full
 }
-bool Hash::table2Linear(int index, int key){ 
+bool Hash::table2Linear(int index, int key){
   for(int i = index; i < TABLE_SIZE; i++){
     if(hashTable2[i] == -1) //If empty index
     hashTable2[i] = key; //Place new data
@@ -69,11 +70,27 @@ bool Hash::table2Linear(int index, int key){
   }
   return false; //If table full
 }
+
+void Hash::testInsert(int key){
+  int index = hashMod(key);
+  if(hashTable1[index] == -1)
+    hashTable1[index] = key;
+  else
+    table1Linear(index, key);
+
+
+
 }
 
 int main(){
   Hash h1;
   //cout << h1.hashFloor(5221) << endl;//Expected 5
 
+  // h1.printTable(1);
+  h1.testInsert(0);
+  h1.testInsert(1018);
+  h1.testInsert(1017);
+  h1.testInsert(1016);
+  h1.testInsert(1019);
   h1.printTable(1);
 }
