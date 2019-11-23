@@ -56,11 +56,17 @@ return ;
 }
 bool Hash::table1Linear(int index, int key){
     for(int i = index+1; i < TABLE_SIZE; i++){
-      if(hashTable1[i] == -1){ //If empty index
-      hashTable1[i] = key; //Place new data
-      return true;
+        if(hashTable1[i] == -1){ //If empty index
+            hashTable1[i] = key; //Place new data
+            return true;
+        }
       }
-    }
+      for(int p = 0; p < index; p++){ //After end of table is reached check from begging to index for open slot
+          if(hashTable1[p] == -1){
+            hashTable1[p] = key;
+            return true;
+          }
+      }
     return false; //If table full
 }
 bool Hash::table2Linear(int index, int key){
@@ -93,9 +99,11 @@ int main(){
   // h1.testInsert(1017);
   // h1.testInsert(1016);
   // h1.testInsert(1019);
-  for(int i = 0; i < 1019; i++){
+  for(int i =0 ; i < 4; i++){
     // cout << i * 1019 << endl;
-    h1.testInsert(i * 1019);
+    h1.testInsert(i * 1017);
   }
+  h1.testInsert(1018);
+  h1.testInsert(2 * 1018);
   h1.printTable(1);
 }
