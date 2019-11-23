@@ -70,11 +70,18 @@ bool Hash::table1Linear(int index, int key){
     return false; //If table full
 }
 bool Hash::table2Linear(int index, int key){
-  for(int i = index; i < TABLE_SIZE; i++){
-    if(hashTable2[i] == -1) //If empty index
-    hashTable2[i] = key; //Place new data
-    return true;
-  }
+  for(int i = index+1; i < TABLE_SIZE; i++){
+      if(hashTable2[i] == -1){ //If empty index
+          hashTable2[i] = key; //Place new data
+          return true;
+      }
+    }
+    for(int p = 0; p < index; p++){ //After end of table is reached check from begging to index for open slot
+        if(hashTable2[p] == -1){
+          hashTable2[p] = key;
+          return true;
+        }
+    }
   return false; //If table full
 }
 
