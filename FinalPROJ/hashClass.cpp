@@ -10,6 +10,11 @@ struct TreeNode{ //BST collision struct
   int key;
   TreeNode *left , *right;
 };
+struct hashNode{
+  int data;
+  TreeNode* root;
+  LLNode* head;
+};
 class Hash{
 
   public:
@@ -23,8 +28,8 @@ class Hash{
     bool table2Linear(int index, int key);
   private:
     static const int TABLE_SIZE = 1019;
-    int hashTable1[TABLE_SIZE];
-    int hashTable2[TABLE_SIZE];
+    hashNode* hashTable1[TABLE_SIZE];
+    hashNode* hashTable2[TABLE_SIZE];
 
 };
 Hash::Hash(){
@@ -39,7 +44,7 @@ int Hash::hashMod(int key){
   return key % TABLE_SIZE;
 }
 int Hash::hashFloor(int key){
-  return key/TABLE_SIZE; //Uneven int division just returns floor
+  return key/TABLE_SIZE; // int division just returns floor
 }
 void Hash::printTable(int number){
     if(number == 1){
@@ -73,7 +78,7 @@ bool Hash::table2Linear(int index, int key){
   for(int i = index+1; i < TABLE_SIZE; i++){
       if(hashTable2[i] == -1){ //If empty index
           hashTable2[i] = key; //Place new data
-          return true;
+          return true;//insert data and return
       }
     }
     for(int p = 0; p < index; p++){ //After end of table is reached check from begging to index for open slot
