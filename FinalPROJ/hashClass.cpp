@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include "BST.hpp"
+// #include "BST.hpp"
 using namespace std;
 struct LLNode{ //Linked List collision function
   int key ;
@@ -10,7 +10,6 @@ struct LLNode{ //Linked List collision function
 };
 struct HashNode{
   int linearData;
-  BST b1;
   LLNode* head;
 };
 class Hash{
@@ -189,20 +188,18 @@ void Hash::LLCollision(int key){
        head->next = temp;
 
 }
-void Hash::Driver()
+void Hash::Driver(){
     int count = 0;
     ifstream f;
     string temp;
     f.open("dataSetA.csv");
     while(getline(f, temp, ',')){
-    LinearInsert1(stoi(temp));
-    count ++;
-    if(count == 10) break;
+    LLInsert(stoi(temp));
+    //count ++;
+    //if(count == 10) break;
       //  cout << temp2 << endl;
           //LLInsert(stoi(temp2));
     }
-
-
 }
 int main(){
   Hash h1;
@@ -225,7 +222,7 @@ int main(){
   // h1.LLInsert(1018);
   // h1.LLInsert(2 * 1018);
   //
-  h1.printLinear(1);
-  cout << "Search results:" << h1.LinearSearch1(99325) << endl; //9244
+  h1.LLPrint();
+//  cout << "Search results:" << h1.LinearSearch1(99325) << endl; //9244
 
 }
