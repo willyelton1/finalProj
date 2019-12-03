@@ -8,10 +8,16 @@ struct LLNode{ //Linked List collision function
   int key ;
   LLNode* next;
 };
+struct TreeNode{ //BST collision struct
+  int key;
+  TreeNode *left , *right;
+};
 struct HashNode{
   int linearData;
   LLNode* head;
+  TreeNode* root;
 };
+
 class Hash{
 
   public:
@@ -32,7 +38,19 @@ class Hash{
     void LLInsert(int key);//Linked list
     void LLPrint();
     void LLCollision(int key);
+    ///////////////////////////////////
+    TreeNode* newTreeNode(int key);
+    TreeNode* insertTree1(int key);
+    TreeNode* insertTree2(int key);
+    TreeNode* TreeCollision(TreeNode* node, int key);
+    bool TreeSearch1(int key);
+    bool TreeSearch2(int key);
+    TreeNode* treeSearchHelper(TreeNode* root, int key);
+    void printTree1();
+    void printTree2();
+    void inOrder(TreeNode* root);
     void Driver();
+
   private:
     int const static TABLE_SIZE = 10009;
     HashNode hashTable1[TABLE_SIZE];
@@ -176,30 +194,111 @@ void Hash::LLCollision(int key){
      LLNode* head = hashTable1[index].head;
      LLNode* temp = new LLNode;
      temp->key = key;
-      if(head->key < key){
-       temp->next = head;
+      //if(head->key < key){
+       temp->next = head; //iNSERT new info at the front of the list
        hashTable1[index].head = temp;
        return;
-       }
-       while(head->next && head->key < key){
-          head = head->next;
-       }
-       temp->next = head->next;
-       head->next = temp;
-
+       // }
+       // while(head->next && head->key < key){
+       //    head = head->next;
+       // }
+       // temp->next = head->next;
+       // head->next = temp;
 }
 void Hash::Driver(){
+
     int count = 0;
     ifstream f;
     string temp;
     f.open("dataSetA.csv");
     while(getline(f, temp, ',')){
-    LLInsert(stoi(temp));
+    insertTree1(stoi(temp));
     //count ++;
     //if(count == 10) break;
       //  cout << temp2 << endl;
           //LLInsert(stoi(temp2));
     }
+
+}
+TreeNode* Hash::newTreeNode(int key){
+  TreeNode* rv = new TreeNode;
+  rv->key = key;
+  rv->left = rv->right = NULL;
+  return rv;
+}
+TreeNode* Hash::insertTree1(int key){
+  int index = hashMod(key);
+  if(hashTable1[index].root == NULL){
+    hashTable1[index].root = newTreeNode(key);
+  }
+  else{
+    TreeCollision(hashTable1[index].root, key);
+  }
+}
+TreeNode* Hash::insertTree2(int key){
+  int index = hashMod(key);
+  if(hashTable2[index].root == NULL){
+    hashTable2[index].root = newTreeNode(key);
+  }
+  else{
+    TreeCollision(hashTable2[index].root, key);
+  }
+}
+void Hash::printTree1(){ //for printing all the tree of hashTable1
+  for(int i = 0; i < TABLE_SIZE; i++){
+    cout << i << " " ;
+    if(hashTable1[i].root){
+    inOrder(hashTable1[i].root);
+    }
+    cout << endl;
+  }
+}
+void Hash::printTree2(){//Table 2's print function
+  for(int i = 0; i < TABLE_SIZE; i++){
+    cout << i << " " ;
+    if(hashTable2[i].root){
+    inOrder(hashTable2[i].root); //Standard inorder least to greatest printing
+    }
+    cout << endl;
+  }
+}
+TreeNode* Hash::TreeCollision(TreeNode* root, int key){
+  if(root == NULL) return newTreeNode(key);
+  if(root->key > key){
+    root->left = TreeCollision(root->left, key);
+  }
+  if(root->key < key){
+    root->right = TreeCollision(root->right, key);
+  }
+  return root;
+}
+void Hash::inOrder(TreeNode* root){ //Tree printing helper
+  if(root == NULL) return; //LEFT ROOT RIGHT
+  inOrder(root->left);
+  cout << root->key << " ";
+  inOrder(root->right);
+}
+bool Hash::TreeSearch1(int key){
+  int index = hashMod(key);
+  TreeNode* temp = hashTable1[index].root;
+  TreeNode* rv = treeSearchHelper(temp, key);
+  if(rv) return true;
+  return false;
+}
+
+bool Hash::TreeSearch2(int key){
+  int index = hashFloor(key);
+  TreeNode* temp = hashTable2[index].root;
+  TreeNode* rv = treeSearchHelper(temp, key);
+  if(rv) return true;
+  return false;
+}
+TreeNode* Hash::treeSearchHelper(TreeNode* root, int key){
+  if(root == NULL || root->key == key) return root; //Base case
+  if(root->key > key){
+      return treeSearchHelper(root->left, key);
+  }     //If root key is greater than search key search left
+  return treeSearchHelper(root->right, key); //else search right
 }
 int main(){
   Hash h1;
@@ -221,8 +320,8 @@ int main(){
   // h1.LLInsert(1019);
   // h1.LLInsert(1018);
   // h1.LLInsert(2 * 1018);
-  //
-  h1.LLPrint();
+  h1.printTree1();
+  cout << h1.TreeSearch1(60055); //expected
 //  cout << "Search results:" << h1.LinearSearch1(99325) << endl; //9244
 
 }
